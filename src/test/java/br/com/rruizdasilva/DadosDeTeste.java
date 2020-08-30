@@ -2,7 +2,7 @@ package br.com.rruizdasilva;
 
 import java.io.File;
 
-public class TestData {
+public class DadosDeTeste {
 
   public static String obterJsonComDadosVazios(){
     return "{\n" + "    \"matriz\": \"consultaPessoaDefault\",\n" + "    \"parametros\": {\n" +

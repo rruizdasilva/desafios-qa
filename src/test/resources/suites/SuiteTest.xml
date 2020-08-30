@@ -4,7 +4,7 @@
 <suite name="Desafio QA">
     <test name="API Tests" preserve-order="true">
         <classes>
-            <class name="br.com.rruizdasilva.RelatorioTest"/>
+            <class name="br.com.rruizdasilva.RelatorioTeste"/>
         </classes>
     </test>
 </suite>
