@@ -7,21 +7,20 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import static br.com.rruizdasilva.ReusableMethods.obterNumeroRelatorio;
-import static br.com.rruizdasilva.TestData.obterCaminhoArquivoDadosExternos;
-import static br.com.rruizdasilva.TestData.obterEnderecoAPI;
-import static br.com.rruizdasilva.TestData.obterJsonComDadosVazios;
-import static br.com.rruizdasilva.TestData.obterJsonComRegraDeDataDiferente;
-import static br.com.rruizdasilva.TestData.obterJsonComRegraDeNomeDiferente;
+import static br.com.rruizdasilva.MetodosReutilizaveis.obterNumeroRelatorio;
+import static br.com.rruizdasilva.DadosDeTeste.obterCaminhoArquivoDadosExternos;
+import static br.com.rruizdasilva.DadosDeTeste.obterEnderecoAPI;
+import static br.com.rruizdasilva.DadosDeTeste.obterJsonComDadosVazios;
+import static br.com.rruizdasilva.DadosDeTeste.obterJsonComRegraDeDataDiferente;
+import static br.com.rruizdasilva.DadosDeTeste.obterJsonComRegraDeNomeDiferente;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class RelatorioTest {
+public class RelatorioTeste {
 
   private static final String END_API = obterEnderecoAPI();
   private static String TOKEN;
@@ -65,8 +64,8 @@ public class RelatorioTest {
         .then()
         .log().all()
         .statusCode(200)
-        .body("result.mensagem", notNullValue())
-        .body("result.status", notNullValue());
+        .body("result.mensagem", is("Inválido. [ERROR] Não foi possível validar: Data de nascimento informada está divergente da constante na base de dados da Secretaria da Receita Federal do Brasil."))
+        .body("result.status", is("INVALID"));
   }
 
   @Test
@@ -81,13 +80,13 @@ public class RelatorioTest {
         .then()
         .log().all()
         .statusCode(200)
-        .body("result.mensagem", notNullValue())
-        .body("result.status", notNullValue());
+        .body("result.mensagem", is("Inválido. [INVALID] Nome diferente do cadastrado na Receita Federal."))
+        .body("result.status", is("INVALID"));
   }
 
   @Test(dataProvider = "obterDadosExternos" )
   public void enviarRelatorioDadosExternos(String data, String nome, String cpf){
-    final String regraDadosExternos = TestData.obterJsonComOsSeguintesDados(data, nome, cpf);
+    final String regraDadosExternos = DadosDeTeste.obterJsonComOsSeguintesDados(data, nome, cpf);
     System.out.println(regraDadosExternos);
     String numero = obterNumeroRelatorio(TOKEN, regraDadosExternos, END_API);
     given()
